@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreDisplay = document.querySelector('#scort');
     const startBtn = document.querySelector('#start-button');
     const width = 10;
+    let nextRandom = 0;
 
     // The Tetrominos
     const lTetromino = [
@@ -79,10 +80,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (current.some(index => squares[currentPosition + index + width].classList.contains('taken'))) {
             current.forEach(index => squares[currentPosition + index].classList.add('taken'))
             //start a new tetrmino falling
-            random = Math.floor(Math.random() * theTetraminos.length);
+            random = nextRandom;
+            nextRandom = Math.floor(Math.random() * theTetraminos.length);
             current = theTetraminos[random][currentRotation];
             currentPosition = 4;
             draw();
+            displayShape();
         }
     }
 
@@ -139,6 +142,18 @@ document.addEventListener('DOMContentLoaded', () => {
         [0, 1, displayWidth, displayWidth + 1], // oTetramino
         [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 3 + 1], // iTetramino
     ]
+
+    // display tetramino in mini-grid
+    function displayShape() {
+        // remove any tetramino class from every square
+        displaySquares.forEach(square => {
+            square.classList.remove('tetromino')
+        })
+
+        upNextTetramino[nextRandom].forEach(index => {
+            displaySquares[displayIndex + index].classList.add('tetromino')
+        })
+    }
 
     // asign functions to keyCode
     function control(e) {
